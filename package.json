@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.14.0",
     "bluebird": "^3.4.6",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
@@ -15,6 +16,7 @@
     "morgan": "~1.7.0",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "youtube-api": "^2.0.2"
   }
 }
