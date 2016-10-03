@@ -10,10 +10,6 @@ var hike = require('./routes/hike');
 
 var app = express();
 
-app.get('/hike', hike.index);
-app.post('/add_hike', hike.add_hike);
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
