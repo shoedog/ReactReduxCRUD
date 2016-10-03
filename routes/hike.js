@@ -1,5 +1,5 @@
 exports.index = function(req, res) {
-  res.render('hike', {title: 'My Hiking Log'});
+  res.render('pages/hike');
 };
 
 exports.add_hike = function(req, res) {
