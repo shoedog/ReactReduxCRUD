@@ -15,7 +15,7 @@ app.post('/add_hike', hike.add_hike);
 
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views', 'pages'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public

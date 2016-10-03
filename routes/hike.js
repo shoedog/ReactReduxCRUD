@@ -1,4 +1,4 @@
-exports.index = function(req, res) {
+exports.hike = function(req, res) {
   res.render('pages/hike');
 };
 
