@@ -1,4 +1,4 @@
-/* Include the cluster module */
+/* Include the cluster module
 var cluster = require('cluster');
 
 // Code to run if we're in the master process
@@ -22,7 +22,7 @@ if (cluster.isMaster) {
     });
 
 // Code to run if we're in a worker process
-} else {
+} else */{
     var AWS = require('aws-sdk');
     var express = require('express');
     var bodyParser = require('body-parser');
@@ -31,11 +31,9 @@ if (cluster.isMaster) {
 
     AWS.config.region = process.env.REGION
 
-    var sns = new AWS.SNS();
     var ddb = new AWS.DynamoDB();
 
     var ddbTable =  process.env.STARTUP_SIGNUP_TABLE;
-    var snsTopic =  process.env.NEW_SIGNUP_TOPIC;
     var app = express();
 
     app.use(express.static('public'));
@@ -69,21 +67,6 @@ if (cluster.isMaster) {
 
                 res.status(returnStatus).end();
                 console.log('DDB Error: ' + err);
-            } else {
-                sns.publish({
-                    'Message': 'Name: ' + req.body.name + "\r\nEmail: " + req.body.email
-                                        + "\r\nPreviewAccess: " + req.body.previewAccess
-                                        + "\r\nTheme: " + req.body.theme,
-                    'Subject': 'New user sign up!!!',
-                    'TopicArn': snsTopic
-                }, function(err, data) {
-                    if (err) {
-                        res.status(500).end();
-                        console.log('SNS Error: ' + err);
-                    } else {
-                        res.status(201).end();
-                    }
-                });
             }
         });
     });
