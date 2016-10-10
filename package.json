@@ -10,6 +10,7 @@
     "dev": "NODE_ENV=development webpack-dev-server --config ./webpack.development.config.js --progress"
   },
   "dependencies": {
+    "aws-sdk": "^2.6.7",
     "axios": "^0.14.0",
     "babel-polyfill": "^6.16.0",
     "bluebird": "^3.4.6",
