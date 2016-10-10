@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "clean": "rimraf ./public",
-    "start": "NODE_ENV=production webpack --config ./webpack.production.config.js --progress && ./bin/www",
+    "build_prod": "npm run clean && NODE_ENV=production webpack --config ./webpack.production.config.js --progress",
+    "start": "node ./bin/www",
     "dev": "NODE_ENV=development webpack-dev-server --config ./webpack.development.config.js --progress"
   },
   "dependencies": {
