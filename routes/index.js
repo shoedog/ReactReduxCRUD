@@ -6,11 +6,7 @@ var axios = require('axios');
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  var title = 'Demo Cloud App';
-
-   res.render('index', {
-     title: title
-   });
+   res.render('index');
 });
 
 module.exports = router;
