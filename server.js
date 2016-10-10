@@ -57,7 +57,7 @@ if (cluster.isMaster) {
         };
 
         ddb.putItem({
-            'TableName': ddbTable,
+            'TableName': "Music",
             'Item': item,
         }, function(err, data) {
             if (err) {
