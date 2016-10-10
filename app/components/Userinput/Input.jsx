@@ -19,16 +19,30 @@ class Inputform extends Component {
   handleArtistNameChange(e) {
     this.setState({artist: e.target.value});
   }
+
   handleListenCountChange(e) {
     this.setState({listenCount: e.target.value});
   }
+
   handleSongTitleChange(e) {
     this.setState({songTitle: e.target.value});
   }
+
+  onCheckChange(e) {
+    this.setState({isChecked: !this.state.isChecked});
+  }
+
+  handleOptionChange(e) {
+    this.setState({
+      rating: e.target.value
+    });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     const songTitle = this.state.songTitle;
     const artist = this.state.artist;
+
 
     if( !songTitle || !artist ){
       return;
@@ -38,7 +52,7 @@ class Inputform extends Component {
     axios.post('/addTrack',
       querystring.stringify({
         artist: this.state.artist,
-        songTitle: this.state.songTitlem,
+        songTitle: this.state.songTitle,
         listenCount: this.state.listenCount,
         favorite: this.state.isChecked,
         rating: this.state.rating,
@@ -48,21 +62,15 @@ class Inputform extends Component {
         }
       }).then(function (response) {
       console.log(response);
+      this.setState({artist: '', listenCount: 1, songTitle: '', isChecked: false, rating: '3 Stars'});
     }).catch(function (error) {
       console.log("error submitting")
       console.log(error);
+      this.setState({artist: '', listenCount: 1, songTitle: '', isChecked: false, rating: '3 Stars'});
     });
+  }
 
-    this.setState({artist: '', listenCount: 1, songTitle: '', isChecked: false, rating: '3 Stars'});
-  }
-  onCheckChange(e) {
-    this.setState({isChecked: !this.state.isChecked});
-  }
-  handleOptionChange(e) {
-    this.setState({
-      rating: e.target.value
-    });
-  }
+
 
 
   render() {
