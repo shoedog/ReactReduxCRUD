@@ -51,7 +51,7 @@ if (cluster.isMaster) {
         var item = {
             'artist': {'S': req.body.artist},
             'songTitle': {'S': req.body.songTitle},
-            'favorite': {'BOOL': req.body.favorite},
+            'favorite': {'S': req.body.favorite},
             'listenCount': {'N': req.body.listenCount},
             'rating': {'S': req.body.rating },
         };
