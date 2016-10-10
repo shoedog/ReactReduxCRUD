@@ -31,7 +31,7 @@ if (cluster.isMaster) {
 
     AWS.config.region = process.env.REGION
 
-    var ddb = new AWS.DynamoDB();
+    var ddb = new AWS.DynamoDB({region: 'us-west-2'});
 
     var ddbTable =  process.env.STARTUP_MUSIC_TABLE;
     var app = express();
@@ -72,6 +72,10 @@ if (cluster.isMaster) {
             }
         });
     });
+
+    app.get('/getTracks', function(req, res) {
+
+    })
 
     var port = process.env.PORT || 3000;
 
