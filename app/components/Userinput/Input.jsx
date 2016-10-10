@@ -1,6 +1,7 @@
 import React, { Component, PropTypes, defaultProps } from 'react';
 import axios from 'axios';
 import formSerialize from 'form-serialize';
+import querystring from 'querystring';
 
 class Inputform extends Component {
   constructor(props) {
@@ -34,14 +35,20 @@ class Inputform extends Component {
     }
     let formData = formSerialize(e.target, {empty: true});
     console.log(formData);
-
-    axios.post('/addTrack', {
-      formData
-    })
-    .then(function (response) {
+    axios.post('/addTrack',
+      querystring.stringify({
+        artist: this.state.artist,
+        songTitle: this.state.songTitlem,
+        listenCount: this.state.listenCount,
+        favorite: this.state.isChecked,
+        rating: this.state.rating,
+      }), {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }).then(function (response) {
       console.log(response);
-    })
-    .catch(function (error) {
+    }).catch(function (error) {
       console.log("error submitting")
       console.log(error);
     });

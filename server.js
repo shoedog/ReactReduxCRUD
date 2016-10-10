@@ -42,6 +42,7 @@ if (cluster.isMaster) {
       res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
     });
 
+
     //app.set('views', __dirname + '/views');
     app.use(bodyParser.urlencoded({extended:false}));
 
@@ -52,7 +53,7 @@ if (cluster.isMaster) {
             'songTitle': {'S': req.body.songTitle},
             'favorite': {'BOOL': req.body.favorite},
             'listenCount': {'N': req.body.listenCount},
-            'rating': {'S': req.body.rating }
+            'rating': {'S': req.body.rating },
         };
 
         ddb.putItem({
