@@ -1,6 +1,5 @@
 import React, { Component, PropTypes, defaultProps } from 'react';
 import axios from 'axios';
-import formSerialize from 'form-serialize';
 import querystring from 'querystring';
 
 class Inputform extends Component {
@@ -42,13 +41,9 @@ class Inputform extends Component {
     e.preventDefault();
     const songTitle = this.state.songTitle;
     const artist = this.state.artist;
-
-
     if( !songTitle || !artist ){
       return;
     }
-    let formData = formSerialize(e.target, {empty: true});
-    console.log(formData);
     axios.post('/addTrack',
       querystring.stringify({
         artist: this.state.artist,
@@ -62,12 +57,12 @@ class Inputform extends Component {
         }
       }).then(function (response) {
       console.log(response);
-      this.setState({artist: '', listenCount: 1, songTitle: '', isChecked: false, rating: '3 Stars'});
     }).catch(function (error) {
       console.log("error submitting")
       console.log(error);
-      this.setState({artist: '', listenCount: 1, songTitle: '', isChecked: false, rating: '3 Stars'});
     });
+
+    this.setState({artist: '', listenCount: 1, songTitle: '', isChecked: false, rating: '3 Stars'});
   }
 
 

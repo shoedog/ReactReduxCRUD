@@ -71,6 +71,7 @@ if (cluster.isMaster) {
                 console.log('DDB Error: ' + err);
             }
         });
+        res.status(200).end();
     });
 
     app.get('/getTracks', function(req, res) {
