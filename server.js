@@ -49,8 +49,8 @@ if (cluster.isMaster) {
     app.post('/addTrack', function(req, res) {
       console.log(req.body);
         var item = {
-            'artist': {'S': req.body.artist},
-            'songTitle': {'S': req.body.songTitle},
+            'Artist': {'S': req.body.artist},
+            'SongTitle': {'S': req.body.songTitle},
             'favorite': {'S': req.body.favorite},
             'listenCount': {'N': req.body.listenCount},
             'rating': {'S': req.body.rating },
