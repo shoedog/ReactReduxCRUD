@@ -1,4 +1,4 @@
-/* Include the cluster module
+// Include the cluster module
 var cluster = require('cluster');
 
 // Code to run if we're in the master process
@@ -22,7 +22,7 @@ if (cluster.isMaster) {
     });
 
 // Code to run if we're in a worker process
-} else */{
+} else {
     var AWS = require('aws-sdk');
     var express = require('express');
     var bodyParser = require('body-parser');
