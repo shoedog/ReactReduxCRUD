@@ -33,7 +33,7 @@ if (cluster.isMaster) {
 
     var ddb = new AWS.DynamoDB();
 
-    var ddbTable =  process.env.STARTUP_SIGNUP_TABLE;
+    var ddbTable =  process.env.STARTUP_MUSIC_TABLE;
     var app = express();
 
     app.use(express.static('public'));
@@ -45,18 +45,18 @@ if (cluster.isMaster) {
     //app.set('views', __dirname + '/views');
     app.use(bodyParser.urlencoded({extended:false}));
 
-    app.post('/signup', function(req, res) {
+    app.post('/addTrack', function(req, res) {
         var item = {
-            'email': {'S': req.body.email},
-            'name': {'S': req.body.name},
-            'preview': {'S': req.body.previewAccess},
-            'theme': {'S': req.body.theme}
+            'artist': {'S': req.body.artist},
+            'songTitle': {'S': req.body.songTitle},
+            'favorite': {'BOOL': req.body.favorite},
+            'listenCount': {'N': req.body.listenCount},
+            'rating': {'S': req.body.rating }
         };
 
         ddb.putItem({
             'TableName': ddbTable,
             'Item': item,
-            'Expected': { email: { Exists: false } }
         }, function(err, data) {
             if (err) {
                 var returnStatus = 500;
