@@ -1,4 +1,4 @@
-/* Include the cluster module */
+// Include the cluster module
 var cluster = require('cluster');
 
 // Code to run if we're in the master process

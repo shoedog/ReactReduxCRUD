@@ -28,7 +28,6 @@ if (cluster.isMaster) {
     var bodyParser = require('body-parser');
     var path = require('path');
     var compression = require('compression');
-    const setup = require('./frontEndMiddleware');
 
     AWS.config.region = process.env.REGION
 
@@ -42,7 +41,7 @@ if (cluster.isMaster) {
     app.use(express.static('public'));
     app.use(compression());
     app.get('*', function(req, res) {
-      res.sendFile(path.resolve('../', 'public', 'index.html'));
+      res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
     });
 
     //app.set('views', __dirname + '/views');

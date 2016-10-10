@@ -5,7 +5,8 @@
   "scripts": {
     "clean": "rimraf ./public",
     "build_prod": "npm run clean && NODE_ENV=production webpack --config ./webpack.production.config.js --progress",
-    "start": "node ./bin/www",
+    "build_serve": "npm run build_prod && node server.js",
+    "start": "node server.js",
     "dev": "NODE_ENV=development webpack-dev-server --config ./webpack.development.config.js --progress"
   },
   "dependencies": {
