@@ -26,13 +26,26 @@ class Inputform extends Component {
   }
   handleSubmit(e) {
     e.preventDefault();
+    const songTitle = this.state.songTitle;
+    const artist = this.state.artist;
 
     if( !songTitle || !artist ){
       return;
     }
     let formData = formSerialize(e.target, {empty: true});
     console.log(formData);
-    postData(formData)
+
+    axios.post('/addTrack', {
+      formData
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log("error submitting")
+      console.log(error);
+    });
+
     this.setState({artist: '', listenCount: 1, songTitle: '', isChecked: false, rating: '3 Stars'});
   }
   onCheckChange(e) {
@@ -43,17 +56,7 @@ class Inputform extends Component {
       rating: e.target.value
     });
   }
-  postData(data) {
-    axios.post('/addTrack', {
-      data
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
+
 
   render() {
     return (
@@ -68,7 +71,7 @@ class Inputform extends Component {
         </div>
         <div>
           <label htmlFor="songTitle">Song Title (required): </label>
-          <input name="songTitle" required="true" type="text" placeholder="songTitle" value={this.state.songTitle} onChange={(e) => this.handleSongTitleChange(e)}/>
+          <input name="songTitle" required="true" type="text" placeholder="Song Title" value={this.state.songTitle} onChange={(e) => this.handleSongTitleChange(e)}/>
         </div>
         <div>
           <label>Add to Favs?  </label>

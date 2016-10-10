@@ -46,6 +46,7 @@ if (cluster.isMaster) {
     app.use(bodyParser.urlencoded({extended:false}));
 
     app.post('/addTrack', function(req, res) {
+      console.log(req.body);
         var item = {
             'artist': {'S': req.body.artist},
             'songTitle': {'S': req.body.songTitle},
