@@ -80,10 +80,11 @@ if (cluster.isMaster) {
             };
             songs.push(song);
             console.log(songs);
-            res.status(200).send(Object.keys(songs)
-              .map((key) => songs[key]));
-            res.send(songs);
+
           });
+          res.status(200).send(Object.keys(songs)
+            .map((key) => songs[key]));
+          //res.send(songs);
 
         }
       });
