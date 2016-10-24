@@ -36,6 +36,7 @@ if (cluster.isMaster) {
 
     var ddbTable =  process.env.STARTUP_SONGS_TABLE;
 
+    const songs = {};
 
     var app = express();
     app.use(express.static('public'));
@@ -50,7 +51,7 @@ if (cluster.isMaster) {
     app.use(bodyParser.json());
 
     app.get('/songs', function(req, res) {
-      var params = {
+      /*var params = {
         TableName: "Songs",
         ProjectionExpression: "songId, artist, songTitle, favorite," +
         " listenCount," +
@@ -87,15 +88,19 @@ if (cluster.isMaster) {
           //res.send(songs);
 
         }
-      });
+      });*/
+      res.send(
+        Object.keys(songs)
+          .map((key) => songs[key])
+      );
     });
 
     app.post('/songs', function(req, res) {
-
+/*
       const song = {
         'songId': {'S': uuid.v4()},
       };
-      console.log(song);
+
 
       ddb.putItem({
           'TableName': "Songs",
@@ -116,6 +121,18 @@ if (cluster.isMaster) {
         //songs[song.id] = song;
         res.send(song);
       });
+      */
+      const song = {
+        id: uuid.v4(),
+        artist: req.body.artist,
+        songTitle: req.body.songTitle,
+        favorite: req.body.favorite,
+        listenCount: req.body.listenCount,
+        rating: req.body.rating,
+      };
+
+      songs[song.id] = song;
+      res.send(song);
     });
 
     app.delete('/songs/:id', function(req, res) {
@@ -128,15 +145,16 @@ if (cluster.isMaster) {
     });
 
     app.put('/songs/:id', function(req, res) {
-       let songId = songs[req.params.id];
+       const song = songs[req.params.id];
 
+      /*
        const song = {
         'artist': {'S': req.body.artist},
         'songTitle': {'S': req.body.songTitle},
         'favorite': {'S': req.body.favorite},
         'listenCount': {'S': req.body.listenCount},
         'rating': {'S': req.body.rating},
-      };
+      };*/
 
 
       if (!song) {
