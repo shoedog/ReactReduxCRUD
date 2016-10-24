@@ -95,12 +95,12 @@ if (cluster.isMaster) {
       console.log(req.body);
 
       const song = {
-        id: {'N': uuid.v4()},
-        artist: {'S': req.body.artist},
-        songTitle: {'S': req.body.songTitle},
-        favorite: {'S': req.body.favorite},
-        listenCount: {'S': req.body.listenCount},
-        rating: {'S': req.body.rating},
+        'id': {'N': uuid.v4()},
+        'artist': {'S': req.body.artist},
+        'songTitle': {'S': req.body.songTitle},
+        'favorite': {'S': req.body.favorite},
+        'listenCount': {'S': req.body.listenCount},
+        'rating': {'S': req.body.rating},
       };
 
       ddb.putItem({
@@ -117,11 +117,11 @@ if (cluster.isMaster) {
               res.status(returnStatus).end();
               console.log('DDB Error: ' + err);
           }
-      });
         res.status(200).end();
 
-      songs[song.id] = song;
-      res.send(song);
+        songs[song.id] = song;
+        res.send(song);
+      });
     });
 
     app.delete('/songs/:id', function(req, res) {
