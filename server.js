@@ -58,8 +58,8 @@ if (cluster.isMaster) {
 
     app.get('/songs', function(req, res) {
       var params = {
-        TableName: "Songs",
-        ProjectionExpression: "songId, artist, songTitle, favorite," +
+        'TableName': ddbTable,
+        'ProjectionExpression': "songId, artist, songTitle, favorite," +
         " listenCount," +
         " rating",
       };
@@ -83,7 +83,7 @@ if (cluster.isMaster) {
               artist: song.hasOwnProperty('artist') ? song.artist['S'] : '',
               songTitle: song.hasOwnProperty('songTitle') ? songTitle['S'] : '',
               favorite: song.hasOwnProperty('favorite') ? song.favorite['S'] : 'false',
-              listenCount: song.hasOwnProperty('listenCount') ? song.listenCount['N'] : 0,
+              listenCount: song.hasOwnProperty('listenCount') ? song.listenCount['S'] : '0',
               rating: song.hasOwnProperty('rating') ? song.rating['S'] : '',
             };
             songs.push(Song);
@@ -126,12 +126,12 @@ if (cluster.isMaster) {
 
     app.delete('/songs/:id', function(req, res) {
       const params = {
-        Key: {
-          songId: {
-            S: req.params.id
+        'Key': {
+          'songId': {
+            'S': req.params.id
           },
         },
-        TableName: 'Songs'
+        'TableName': 'Songs'
       };
 
       ddb.deleteItem(params, function(err, data) {
@@ -156,22 +156,22 @@ if (cluster.isMaster) {
         let rating = req.body.rating;
 
       const params = {
-        Key: {
-          songId: {
+        'Key': {
+          'songId': {
             'S': req.params.id
           },
         },
-        TableName: 'Songs',
-        UpdateExpression: 'SET artist = :a, songTitle = :t, favorite = :f,' +
+        'TableName': 'Songs',
+        'UpdateExpression': 'SET artist = :a, songTitle = :t, favorite = :f,' +
         ' listenCount = :c, rating = :r',
-        ExpressionAttributeValues: {
+        'ExpressionAttributeValues': {
           ":a": { 'S': artist },
           ":t": { 'S': songTitle},
           ":f": { 'S': favorite},
-          ":c": { 'N': listenCount},
+          ":c": { 'S': listenCount},
           ":r": { 'S': rating},
         },
-        ReturnValues: 'UPDATED_NEW'
+        'ReturnValues': 'UPDATED_NEW'
       };
 
      ddb.updateItem(params, function(err, song) {
@@ -188,9 +188,9 @@ if (cluster.isMaster) {
          let Song = {
            id: song.songId['S'],
            artist: song.hasOwnProperty('artist') ? song.artist['S'] : '',
-           songTitle: song.songTitle['S'],
+           songTitle: song.hasOwnProperty('songTitle') ? song.songTitle['S'] : '',
            favorite: song.hasOwnProperty('favorite') ? song.favorite['S'] : 'false',
-           listenCount: song.hasOwnProperty('listenCount') ? song.listenCount['N'] : 0,
+           listenCount: song.hasOwnProperty('listenCount') ? song.listenCount['S'] : '0',
            rating: song.hasOwnProperty('rating') ? song.rating['S'] : '',
          };
          res.status(200).send(Song);
