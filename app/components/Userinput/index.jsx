@@ -62,7 +62,7 @@ class Inputform extends Component {
 
   render() {
     return (
-      <form style={style.song} id="submitForm" onSubmit={(e, artist, songTitle, listenCount, tfavorite, rating ) => this.handleSubmit(e, this.state.artist, this.state.songTitle, this.state.listenCount, this.state.favorite, this.state.rating, this.state.id)}>
+      <form style={style.song} id="submitForm" onSubmit={(e, artist, songTitle, listenCount, favorite, rating ) => this.handleSubmit(e, this.state.artist, this.state.songTitle, this.state.listenCount, this.state.favorite, this.state.rating, this.state.id)}>
         <div style={style.row}>
           <label style={style.label} htmlFor="name">Artist Name: </label>
           <input name="artist" type="text" placeholder="Artist Name" value={this.state.artist} onChange={(e) => this.handleArtistNameChange(e)}/>
