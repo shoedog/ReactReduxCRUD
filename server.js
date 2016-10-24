@@ -158,7 +158,7 @@ if (cluster.isMaster) {
       const params = {
         Key: {
           songId: {
-            S: req.params.id
+            'S': req.params.id
           },
         },
         TableName: 'Songs',
