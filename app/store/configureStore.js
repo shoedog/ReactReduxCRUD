@@ -1,14 +1,23 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import browserHistory from 'react-router';
-import thunkMiddleware from 'redux-thunk';
-import rootReducer from '../reducer';
+import thunk from 'redux-thunk';
+import rootReducer from '../reducers/asyncReducers';
 
+const configureStore = preloadedState => {
+  const store = createStore(
+    rootReducer,
+    preloadedState,
+    applyMiddleware(thunk),
+  );
+/*
+  if (module.hot) {
+    // Enable Webpack hot module replacement for reducers
+    module.hot.accept('../reducer', () => {
+      const nextRootReducer = require('../reducer').default
+      store.replaceReducer(nextRootReducer)
+    })
+  }
+*/
+  return store
+};
 
-
-export default function configureStore(initialState) {
-  let middlewares = [ thunkMiddleware ];
-
-  const store = createStore(rootReducer, initialState, applyMiddleware(...middlewares));
-
-  return store;
-}
+export default configureStore;

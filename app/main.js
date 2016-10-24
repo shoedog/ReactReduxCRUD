@@ -1,27 +1,18 @@
 import React from 'react';
-import {render} from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddware } from 'redux';
-import { applyRouterMiddleware, Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 import configureStore from './store/configureStore';
-
 import App from './containers/App';
-import Home from './containers/home/Home';
-//<Route path="/signup" component={Signup} />
+//import Root from './containers/Root';
 
-import './main.css';
+//const store = configureStore();
+const history = browserHistory;
 
-const initialState = {};
-const store = configureStore(initialState);
-
-render(
-  <Provider store={store}>
-    <Router history={browserHistory}>
-      <Route path="/" component={App}>
-        <IndexRoute component={Home} />;
-
-      </Route>
-    </Router>
-  </Provider>
-  , document.getElementById('root'));
+ReactDOM.render(
+  <Provider store={configureStore()}>
+    <App />
+  </Provider>,
+document.getElementById('root')
+);
