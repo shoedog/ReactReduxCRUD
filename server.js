@@ -82,14 +82,10 @@ if (cluster.isMaster) {
             };
             songs.push(song);
           });
-          res.status(200).send(songs);
+          res.status(200).send(Object.keys(songs)
+            .map((key) => songs[key]));
         }
       }
-      res.send(
-        Object.keys(songs)
-          .map((key) => songs[key])
-          //.sort((a, b) => b.timestamp - a.timestamp)
-      );
     });
 
     app.post('/songs', function(req, res) {
