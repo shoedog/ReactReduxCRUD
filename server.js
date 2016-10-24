@@ -31,9 +31,15 @@ if (cluster.isMaster) {
     var uuid = require('uuid');
 
     AWS.config.region = process.env.REGION;
+  /*AWS.config.update({
+    region: "us-west-2",
+    endpoint: "http://localhost:8000"
+  });*/
 
+  //var ddb = new AWS.DynamoDB();
+  //ddb.setEndpoint("http://localhost:8000");
+  //var table = "Songs";
     var ddb = new AWS.DynamoDB({region: 'us-west-2'});
-
     var ddbTable =  process.env.STARTUP_SONGS_TABLE;
 
     const songs = {};
@@ -41,7 +47,7 @@ if (cluster.isMaster) {
     var app = express();
     app.use(express.static('public'));
     app.use(compression());
-    app.get('*', function(req, res) {
+    app.get('/', function(req, res) {
       res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
     });
 
@@ -51,7 +57,7 @@ if (cluster.isMaster) {
     app.use(bodyParser.json());
 
     app.get('/songs', function(req, res) {
-      /*var params = {
+      var params = {
         TableName: "Songs",
         ProjectionExpression: "songId, artist, songTitle, favorite," +
         " listenCount," +
@@ -70,37 +76,31 @@ if (cluster.isMaster) {
           console.log('DDB Error: ' + err);
         } else {
           let songs = [];
-          data.Items.forEach(function(data) {
-            let song = {
-              id: data.songId,
-              artist: data.artist,
-              songTitle: data.songTitle,
-              favorite: data.favorite,
-              listenCount: data.listenCount,
-              rating: data.rating
+          data.Items.forEach(function(song) {
+
+            let Song = {
+              id: song.songId['S'],
+              artist: song.hasOwnProperty('artist') ? song.artist['S'] : '',
+              songTitle: song.hasOwnProperty('songTitle') ? songTitle['S'] : '',
+              favorite: song.hasOwnProperty('favorite') ? song.favorite['S'] : 'false',
+              listenCount: song.hasOwnProperty('listenCount') ? song.listenCount['N'] : 0,
+              rating: song.hasOwnProperty('rating') ? song.rating['S'] : '',
             };
-            songs.push(song);
+            songs.push(Song);
             console.log(songs);
 
           });
           res.status(200).send(Object.keys(songs)
             .map((key) => songs[key]));
-          //res.send(songs);
-
         }
-      });*/
-      res.send(
-        Object.keys(songs)
-          .map((key) => songs[key])
-      );
+      });
     });
 
     app.post('/songs', function(req, res) {
-/*
+
       const song = {
         'songId': {'S': uuid.v4()},
       };
-
 
       ddb.putItem({
           'TableName': "Songs",
@@ -115,60 +115,87 @@ if (cluster.isMaster) {
 
               res.status(returnStatus).end();
               console.log('DDB Error: ' + err);
+          } else {
+            const Song = {
+              id: song.songId['S']
+            };
+            res.status(200).send(Song);
           }
-        res.status(200).end();
-
-        //songs[song.id] = song;
-        res.send(song);
       });
-      */
-      const song = {
-        id: uuid.v4(),
-        artist: req.body.artist,
-        songTitle: req.body.songTitle,
-        favorite: req.body.favorite,
-        listenCount: req.body.listenCount,
-        rating: req.body.rating,
-      };
-
-      songs[song.id] = song;
-      res.send(song);
     });
 
     app.delete('/songs/:id', function(req, res) {
-      const song = songs[req.params.id];
-      if (!song) {
-        return res.status(404).send('Song not found');
-      }
-      delete songs[req.params.id];
-      res.send();
+      const params = {
+        Key: {
+          songId: {
+            S: req.params.id
+          },
+        },
+        TableName: 'Songs'
+      };
+
+      ddb.deleteItem(params, function(err, data) {
+        if(err) {
+          console.log(err, err.stack);
+          res.status(500).send(err);
+        } else {
+          res.status(200).end();
+        }
+      });
     });
 
     app.put('/songs/:id', function(req, res) {
-       const song = songs[req.params.id];
-
-      /*
-       const song = {
-        'artist': {'S': req.body.artist},
-        'songTitle': {'S': req.body.songTitle},
-        'favorite': {'S': req.body.favorite},
-        'listenCount': {'S': req.body.listenCount},
-        'rating': {'S': req.body.rating},
-      };*/
+       //const song = songs[req.params.id];
+        console.log('update');
 
 
-      if (!song) {
-        return res.status(404).send('Song not found');
-      }
+        let artist = req.body.artist;
+        let songTitle = req.body.songTitle;
+        let favorite = req.body.favorite;
+        let listenCount = req.body.listenCount;
+        let rating = req.body.rating;
 
-      song.artist = req.body.artist;
-      song.songTitle = req.body.songTitle;
-      song.favorite = req.body.favorite;
-      song.listenCount = req.body.listenCount;
-      song.rating = req.body.rating;
+      const params = {
+        Key: {
+          songId: {
+            S: req.params.id
+          },
+        },
+        TableName: 'Songs',
+        UpdateExpression: 'SET artist = :a, songTitle = :t, favorite = :f,' +
+        ' listenCount = :c, rating = :r',
+        ExpressionAttributeValues: {
+          ":a": { 'S': artist },
+          ":t": { 'S': songTitle},
+          ":f": { 'S': favorite},
+          ":c": { 'N': listenCount},
+          ":r": { 'S': rating},
+        },
+        ReturnValues: 'UPDATED_NEW'
+      };
 
+     ddb.updateItem(params, function(err, song) {
+       if(err) {
+         var returnStatus = 500;
 
-      res.send(song);
+         if (err.code === 'ConditionalCheckFailedException') {
+           returnStatus = 409;
+         }
+
+         res.status(returnStatus).end();
+         console.log('DDB Error: ' + err);
+       } else {
+         let Song = {
+           id: song.songId['S'],
+           artist: song.hasOwnProperty('artist') ? song.artist['S'] : '',
+           songTitle: song.songTitle['S'],
+           favorite: song.hasOwnProperty('favorite') ? song.favorite['S'] : 'false',
+           listenCount: song.hasOwnProperty('listenCount') ? song.listenCount['N'] : 0,
+           rating: song.hasOwnProperty('rating') ? song.rating['S'] : '',
+         };
+         res.status(200).send(Song);
+       }
+     });
     });
 
     var port = process.env.PORT || 3000;
