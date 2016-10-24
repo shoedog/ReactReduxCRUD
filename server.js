@@ -73,7 +73,7 @@ if (cluster.isMaster) {
           let songs = [];
           data.Items.forEach(function(data) {
             let song = {
-              songId: data.songId,
+              id: data.songId,
               artist: data.artist,
               songTitle: data.songTitle,
               favorite: data.favorite,
