@@ -14,7 +14,7 @@ class SongList extends Component {
     const {songs, openSongId, addSong, openSong} = this.props;
     return (
       <div style={style.wrapper}>
-        <button style={style.addSongButton} onClick={() => addSong()}></button>
+        <button style={style.addSongButton} onClick={() => addSong()}>Add Song</button>
         {(songs.length === 0)
           ? <div style={style.blankslate}>No Songs</div>
           : songs.map((song) => (
@@ -23,7 +23,7 @@ class SongList extends Component {
             : style.song
           }
                   onClick={() => openSong(song.id)}>
-            {song.artist === '' ?
+            {song.artist === ' ' ?
               <span style={style.newSongLabel}>New Song...</span>
               : <div>
               Artist: {song.artist} <br/>
