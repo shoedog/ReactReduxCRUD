@@ -93,15 +93,10 @@ if (cluster.isMaster) {
     });
 
     app.post('/songs', function(req, res) {
-      console.log(req.body);
 
       const song = {
         'songId': {'S': uuid.v4()},
-        'artist': {'S': req.body.artist != undefined ? req.body.artist : ''},
-        'songTitle': {'S': req.body.songTitle != undefined ? req.body.songTitle : ''},
-        'favorite': {'S': req.body.favorite != undefined ? req.body.favorite : ''},
-        'listenCount': {'S': req.body.listenCount != undefined ? req.body.listenCount : ''},
-        'rating': {'S': req.body.rating != undefined ? req.body.rating : ''},
+        
       };
       console.log(song);
 
