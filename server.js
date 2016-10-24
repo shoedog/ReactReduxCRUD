@@ -35,8 +35,7 @@ if (cluster.isMaster) {
     var ddb = new AWS.DynamoDB({region: 'us-west-2'});
 
     var ddbTable =  process.env.STARTUP_SONGS_TABLE;
-
-    const songs = {};
+  
 
     var app = express();
     app.use(express.static('public'));
@@ -98,13 +97,13 @@ if (cluster.isMaster) {
 
       const song = {
         'songId': {'S': uuid.v4()},
-        'artist': {'S': req.body.artist},
-        'songTitle': {'S': req.body.songTitle},
-        'favorite': {'S': req.body.favorite},
-        'listenCount': {'S': req.body.listenCount},
-        'rating': {'S': req.body.rating},
+        'artist': {'S': req.body.artist != undefined ? req.body.artist : ''},
+        'songTitle': {'S': req.body.songTitle != undefined ? req.body.songTitle : ''},
+        'favorite': {'S': req.body.favorite != undefined ? req.body.favorite : ''},
+        'listenCount': {'S': req.body.listenCount != undefined ? req.body.listenCount : ''},
+        'rating': {'S': req.body.rating != undefined ? req.body.rating : ''},
       };
-      console.log(song.id);
+      console.log(song);
 
       ddb.putItem({
           'TableName': "Songs",
