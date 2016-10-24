@@ -53,7 +53,8 @@ if (cluster.isMaster) {
     app.get('/songs', function(req, res) {
       var params = {
         TableName: "Songs",
-        ProjectionExpression: "id, artist, songTitle, favorite, listenCount," +
+        ProjectionExpression: "songId, artist, songTitle, favorite," +
+        " listenCount," +
         " rating",
       };
 
@@ -73,6 +74,7 @@ if (cluster.isMaster) {
           let songs = [];
           data.Items.forEach(function(data) {
             let song = {
+              id: data.songId,
               artist: data.artist,
               songTitle: data.songTitle,
               favorite: data.favorite,
@@ -95,7 +97,7 @@ if (cluster.isMaster) {
       console.log(req.body);
 
       const song = {
-        'id': {'S': uuid.v4()},
+        'songId': {'S': uuid.v4()},
         'artist': {'S': req.body.artist},
         'songTitle': {'S': req.body.songTitle},
         'favorite': {'S': req.body.favorite},
