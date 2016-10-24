@@ -171,11 +171,12 @@ if (cluster.isMaster) {
           ":c": { 'S': listenCount},
           ":r": { 'S': rating},
         },
-        'ReturnValues': 'UPDATED_NEW'
+        'ReturnValues': "UPDATED_NEW"
       };
 
-     ddb.updateItem(params, function(err, song) {
+     ddb.updateItem(params, function(err, data) {
        if(err) {
+         console.log(err);
          var returnStatus = 500;
 
          if (err.code === 'ConditionalCheckFailedException') {
@@ -185,13 +186,15 @@ if (cluster.isMaster) {
          res.status(returnStatus).end();
          console.log('DDB Error: ' + err);
        } else {
+         console.log('update return');
+         console.log(data);
          let Song = {
-           id: song.songId['S'],
-           artist: song.hasOwnProperty('artist') ? song.artist['S'] : '',
-           songTitle: song.hasOwnProperty('songTitle') ? song.songTitle['S'] : '',
-           favorite: song.hasOwnProperty('favorite') ? song.favorite['S'] : 'false',
-           listenCount: song.hasOwnProperty('listenCount') ? song.listenCount['S'] : '0',
-           rating: song.hasOwnProperty('rating') ? song.rating['S'] : '',
+           id: req.params.id,
+           artist: data.hasOwnProperty('artist') ? data.artist['S'] : artist,
+           songTitle: data.hasOwnProperty('songTitle') ? data.songTitle['S'] : songTitle,
+           favorite: data.hasOwnProperty('favorite') ? data.favorite['S'] : favorite,
+           listenCount: data.hasOwnProperty('listenCount') ? data.listenCount['S'] : listenCount,
+           rating: data.hasOwnProperty('rating') ? data.rating['S'] : rating,
          };
          res.status(200).send(Song);
        }
