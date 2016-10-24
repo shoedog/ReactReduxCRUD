@@ -57,9 +57,7 @@ if (cluster.isMaster) {
         " rating",
       };
 
-      ddb.scan({
-        'TableName': "Songs",
-      }), function(err, data) {
+      ddb.scan(params, function(err, data) {
         if (err) {
           var returnStatus = 500;
 
@@ -88,7 +86,7 @@ if (cluster.isMaster) {
           });
 
         }
-      }
+      });
     });
 
     app.post('/songs', function(req, res) {
