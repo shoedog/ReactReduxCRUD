@@ -35,7 +35,7 @@ if (cluster.isMaster) {
     var ddb = new AWS.DynamoDB({region: 'us-west-2'});
 
     var ddbTable =  process.env.STARTUP_SONGS_TABLE;
-  
+
 
     var app = express();
     app.use(express.static('public'));
@@ -121,7 +121,7 @@ if (cluster.isMaster) {
           }
         res.status(200).end();
 
-        songs[song.id] = song;
+        //songs[song.id] = song;
         //res.send(songs);
       });
     });
