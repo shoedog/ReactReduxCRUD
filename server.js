@@ -73,7 +73,7 @@ if (cluster.isMaster) {
           let songs = [];
           data.Items.forEach(function(data) {
             let song = {
-              id: data.songId,
+              songId: data.songId,
               artist: data.artist,
               songTitle: data.songTitle,
               favorite: data.favorite,
@@ -96,7 +96,6 @@ if (cluster.isMaster) {
 
       const song = {
         'songId': {'S': uuid.v4()},
-        
       };
       console.log(song);
 
@@ -117,7 +116,7 @@ if (cluster.isMaster) {
         res.status(200).end();
 
         //songs[song.id] = song;
-        //res.send(songs);
+        res.send(song);
       });
     });
 
@@ -131,7 +130,16 @@ if (cluster.isMaster) {
     });
 
     app.put('/songs/:id', function(req, res) {
-      const song = songs[req.params.id];
+       let songId = songs[req.params.id];
+
+       const song = {
+        'artist': {'S': req.body.artist},
+        'songTitle': {'S': req.body.songTitle},
+        'favorite': {'S': req.body.favorite},
+        'listenCount': {'S': req.body.listenCount},
+        'rating': {'S': req.body.rating},
+      };
+
 
       if (!song) {
         return res.status(404).send('Song not found');
