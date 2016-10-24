@@ -95,13 +95,14 @@ if (cluster.isMaster) {
       console.log(req.body);
 
       const song = {
-        'id': {'N': uuid.v4()},
+        'id': {'S': uuid.v4()},
         'artist': {'S': req.body.artist},
         'songTitle': {'S': req.body.songTitle},
         'favorite': {'S': req.body.favorite},
         'listenCount': {'S': req.body.listenCount},
         'rating': {'S': req.body.rating},
       };
+      console.log(song.id);
 
       ddb.putItem({
           'TableName': "Songs",
