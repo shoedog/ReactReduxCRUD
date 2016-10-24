@@ -120,7 +120,7 @@ if (cluster.isMaster) {
         res.status(200).end();
 
         songs[song.id] = song;
-        res.send(song);
+        //res.send(songs);
       });
     });
 
