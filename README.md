@@ -5,6 +5,6 @@ Basic Async CRUD app with Async Redux Actions and Reducers
  * Bin/ : misc server files for reference( not used )
  * Public/ : Built project
  * .ebcExtensions: AWS stuff
- * song.json : example song data-structure
+ * songList.json : example song data-structure
 
 See package.json for run instructions
