@@ -83,7 +83,7 @@ if (cluster.isMaster) {
               artist: song.hasOwnProperty('artist') ? song.artist['S'] : '',
               songTitle: song.hasOwnProperty('songTitle') ? song.songTitle['S'] : '',
               favorite: song.hasOwnProperty('favorite') ? song.favorite['S'] : 'false',
-              listenCount: song.hasOwnProperty('listenCount') ? song.listenCount['S'] : '0',
+              listenCount: song.hasOwnProperty('listenCount') ? song.listenCount['S'] : '',
               rating: song.hasOwnProperty('rating') ? song.rating['S'] : '',
             };
             songs.push(Song);
